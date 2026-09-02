@@ -102,10 +102,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glm-master;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\include;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glfw3.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\lib-vc2022</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,6 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\gl.c" />
     <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>

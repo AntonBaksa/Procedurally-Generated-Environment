@@ -5,11 +5,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <fstream>
 #include <iostream>
-#include <sstream>
-#include <string>
 
+#include "Shader.h"
 
 namespace
 {
@@ -19,81 +17,6 @@ namespace
     void glfwErrorCallback(int error, const char* description)
     {
         std::cerr << "GLFW error (" << error << "): " << description << '\n';
-    }
-
-    std::string readTextFile(const std::string& path)
-    {
-        std::ifstream file(path);
-        if (!file)
-        {
-            throw std::runtime_error("Could not open file: " + path);
-        }
-
-        std::ostringstream contents;
-        contents << file.rdbuf();
-        return contents.str();
-    }
-
-    GLuint compileShader(GLenum type, const std::string& source, const std::string& label)
-    {
-        const GLuint shader = glCreateShader(type);
-        const char* sourcePtr = source.c_str();
-
-        glShaderSource(shader, 1, &sourcePtr, nullptr);
-        glCompileShader(shader);
-
-        GLint success = GL_FALSE;
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-        if (success == GL_FALSE)
-        {
-            GLint logLength = 0;
-            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
-
-            std::string log(static_cast<std::size_t>(logLength), '\0');
-            //glGetShaderInfoLog(shader, logLength, nullptr, log.data());
-
-            glDeleteShader(shader);
-            throw std::runtime_error("Shader compilation failed (" + label + "):\n" + log);
-        }
-
-        return shader;
-    }
-
-    GLuint createShaderProgram(const std::string& vertexPath, const std::string& fragmentPath)
-    {
-        const std::string vertexSource = readTextFile(vertexPath);
-        const std::string fragmentSource = readTextFile(fragmentPath);
-
-        const GLuint vertexShader =
-            compileShader(GL_VERTEX_SHADER, vertexSource, vertexPath);
-        const GLuint fragmentShader =
-            compileShader(GL_FRAGMENT_SHADER, fragmentSource, fragmentPath);
-
-        const GLuint program = glCreateProgram();
-        glAttachShader(program, vertexShader);
-        glAttachShader(program, fragmentShader);
-        glLinkProgram(program);
-
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
-
-        GLint success = GL_FALSE;
-        glGetProgramiv(program, GL_LINK_STATUS, &success);
-
-        if (success == GL_FALSE)
-        {
-            GLint logLength = 0;
-            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
-
-            std::string log(static_cast<std::size_t>(logLength), '\0');
-            //glGetProgramInfoLog(program, logLength, nullptr, log.data());
-
-            glDeleteProgram(program);
-            throw std::runtime_error("Shader program link failed:\n" + log);
-        }
-
-        return program;
     }
 
     void framebufferSizeCallback(GLFWwindow*, int width, int height)
@@ -113,7 +36,6 @@ namespace
 int main()
 {
     glfwSetErrorCallback(glfwErrorCallback);
-    // Need to initialize GLFW before calling any GLFW functions
     if (glfwInit() != GLFW_TRUE)
     {
         std::cerr << "Failed to initialize GLFW.\n";
@@ -163,6 +85,9 @@ int main()
     glGenBuffers(1, &vbo);
 
     glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo); // fix: was missing, so the attribute
+    // pointers below weren't actually
+    // wired up to this buffer
 
     constexpr GLsizei stride = 6 * sizeof(float);
 
@@ -193,9 +118,9 @@ int main()
         return 1;
     }
 
-    // Uniform locations identify the three matrix inputs in the vertex shader.
-    // We ask for them once after linking, then use the locations when sending
-    // matrix values from the CPU to the GPU before drawing.
+    // Uniform locations identify each shader input. We ask for them once
+    // after linking, then use the locations when sending values from the
+    // CPU to the GPU before drawing.
     const GLint modelLocation = glGetUniformLocation(shaderProgram, "model");
     const GLint viewLocation = glGetUniformLocation(shaderProgram, "view");
     const GLint projectionLocation = glGetUniformLocation(shaderProgram, "projection");
@@ -224,15 +149,13 @@ int main()
     const glm::mat3 normalMatrix =
         glm::transpose(glm::inverse(glm::mat3(model)));
 
-    // The view matrix converts world-space positions into view space. Moving the
-    // world by the negative viewer position places the cube in front of the
-    // viewer without introducing a camera class or camera controls.
+    // The view matrix converts world-space positions into view space. Moving
+    // the world by the negative viewer position places geometry in front of
+    // the viewer without introducing a camera class or camera controls yet.
     const glm::vec3 viewPosition(0.0f, 0.0f, 3.0f);
     const glm::mat4 view =
         glm::translate(glm::mat4(1.0f), -viewPosition);
 
-    // This direction points from the surface toward the light. It is not axis-
-    // aligned, so more than one visible face receives diffuse illumination.
     const glm::vec3 lightDirection =
         glm::normalize(glm::vec3(0.6f, 1.0f, 0.8f));
     const glm::vec3 lightColor(1.0f, 0.96f, 0.90f);
@@ -241,9 +164,6 @@ int main()
     const float specularStrength = 0.28f;
     const float shininess = 32.0f;
 
-    // These values define the perspective viewing volume. Keeping them named and
-    // visible makes it easy to ask: what changes when the field of view narrows,
-    // or when the near and far clipping planes move?
     const float fieldOfView = glm::radians(45.0f);
     const float nearPlane = 0.1f;
     const float farPlane = 100.0f;
@@ -252,10 +172,6 @@ int main()
     {
         processInput(window);
 
-        // Framebuffer dimensions can differ from window dimensions on high-DPI
-        // displays. Reading the current framebuffer size keeps projected shapes
-        // in the correct proportions after a resize. A minimized window may have
-        // no drawable area, so wait for events instead of dividing by zero.
         int framebufferWidth = 0;
         int framebufferHeight = 0;
         glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
@@ -277,9 +193,6 @@ int main()
 
         glUseProgram(shaderProgram);
 
-        // glm::value_ptr exposes each GLM matrix as contiguous float data.
-        // GL_FALSE means OpenGL should use the conventional GLM/OpenGL matrix
-        // layout directly, without transposing it during the upload.
         glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(
@@ -295,7 +208,9 @@ int main()
         glUniform1f(shininessLocation, shininess);
 
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, 36); // TODO: terrain - replace with
+        // glDrawElements once vertex
+        // data + an EBO are added
 
         glfwSwapBuffers(window);
         glfwPollEvents();

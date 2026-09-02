@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glm-master;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\include;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glm-master;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\include;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\include;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\Shaders</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,12 +127,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="src\gl.c" />
     <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FastNoiseLite.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Terrain.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\basic.frag" />
+    <None Include="shaders\basic.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

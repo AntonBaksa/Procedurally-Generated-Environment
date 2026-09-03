@@ -5,7 +5,7 @@
 void CreateNoise() 
 {
 	FastNoiseLite noise;
-	noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	noise.SetNoiseType(FastNoiseLite::NoiseType_Value);
 
 	std::vector<float> noiseData(area * area);
 	int index = 0;

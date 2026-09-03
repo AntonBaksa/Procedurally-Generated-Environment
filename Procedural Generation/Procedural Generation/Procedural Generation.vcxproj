@@ -102,13 +102,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glm-master;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\include;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\include;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\Shaders</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glm-master;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\include;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\include;C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\Shaders;C:\Users\anton.baksa\Documents\GitHub\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation;C:\Users\anton.baksa\Documents\GitHub\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\include;C:\Users\anton.baksa\Documents\GitHub\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glm-master;C:\Users\anton.baksa\Documents\GitHub\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glfw3.lib;opengl32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\lib-vc2022</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\anton\Documents\GirhubRepos\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\lib-vc2022;C:\Users\anton.baksa\Documents\GitHub\Procedurally-Generated-Environment\Procedural Generation\Procedural Generation\glfw-3.5.1.bin.WIN64\lib-vc2026</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

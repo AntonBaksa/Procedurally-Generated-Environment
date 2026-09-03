@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "Shader.h"
+#include "Terrain.h"
 
 namespace
 {
@@ -85,9 +86,7 @@ int main()
     glGenBuffers(1, &vbo);
 
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo); // fix: was missing, so the attribute
-    // pointers below weren't actually
-    // wired up to this buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vbo); 
 
     constexpr GLsizei stride = 6 * sizeof(float);
 

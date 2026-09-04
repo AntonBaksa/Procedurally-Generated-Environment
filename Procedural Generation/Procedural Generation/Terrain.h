@@ -18,7 +18,7 @@ class Terrain
 public:
 	int size = 32;
 	float maxHeight = 1.0f;
-	float noiseFrequency = 0.01;
+	float noiseFrequency = 0.6f;
 
 	std::vector<float> heightmap;
 	std::vector<Vertex> vertices;

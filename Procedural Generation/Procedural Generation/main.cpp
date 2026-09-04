@@ -79,14 +79,24 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
+    Terrain terrain;
+    terrain.CreateNoise();
+    terrain.CreateMesh();
+
     GLuint vao = 0;
     GLuint vbo = 0;
+    GLuint ebo = 0;
 
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
 
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo); 
+
+
+    glBufferData(GL_ARRAY_BUFFER, terrain.vertices.size() * sizeof(Vertex), terrain.vertices.data(), GL_STATIC_DRAW);
+
 
     constexpr GLsizei stride = 6 * sizeof(float);
 
@@ -97,6 +107,11 @@ int main()
     glVertexAttribPointer(
         1, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, terrain.indices.size() * sizeof(unsigned int), terrain.indices.data(), GL_STATIC_DRAW);
+
 
     glBindVertexArray(0);
 
@@ -143,17 +158,17 @@ int main()
 
     glm::mat4 model(1.0f);
 
-    // Positions and normals transform differently. The inverse-transpose keeps
-    // normals perpendicular to their surfaces, including under non-uniform scale.
     const glm::mat3 normalMatrix =
         glm::transpose(glm::inverse(glm::mat3(model)));
 
-    // The view matrix converts world-space positions into view space. Moving
-    // the world by the negative viewer position places geometry in front of
-    // the viewer without introducing a camera class or camera controls yet.
-    const glm::vec3 viewPosition(0.0f, 0.0f, 3.0f);
+
+    const glm::vec3 viewPosition(
+        terrain.size * 0.5f, terrain.maxHeight * 20.0f, terrain.size * 1.5f);
+    const glm::vec3 targetPosition(
+        terrain.size * 0.5f, 0.0f, terrain.size * 0.5f);
     const glm::mat4 view =
-        glm::translate(glm::mat4(1.0f), -viewPosition);
+        glm::lookAt(viewPosition, targetPosition, glm::vec3(0.0f, 1.0f, 0.0f));
+
 
     const glm::vec3 lightDirection =
         glm::normalize(glm::vec3(0.6f, 1.0f, 0.8f));
@@ -207,9 +222,7 @@ int main()
         glUniform1f(shininessLocation, shininess);
 
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 36); // TODO: terrain - replace with
-        // glDrawElements once vertex
-        // data + an EBO are added
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(terrain.indices.size()), GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -217,6 +230,7 @@ int main()
 
     glDeleteProgram(shaderProgram);
     glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
     glDeleteVertexArrays(1, &vao);
 
     glfwDestroyWindow(window);

@@ -7,6 +7,10 @@ struct Vertex
 	float x;
 	float y;
 	float z;
+
+	float nx = 0.0f;
+	float ny = 0.0f;
+	float nz = 0.0f;
 };
 
 class Terrain
@@ -14,7 +18,6 @@ class Terrain
 public:
 	int size = 32;
 	float maxHeight = 1.0f;
-
 	float noiseFrequency = 0.01;
 
 	std::vector<float> heightmap;
@@ -23,5 +26,6 @@ public:
 
 	void CreateNoise();
 	void CreateMesh();
+	void CreateNormals();
 };
 

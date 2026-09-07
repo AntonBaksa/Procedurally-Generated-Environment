@@ -140,9 +140,9 @@ int main()
     const GLint projectionLocation = glGetUniformLocation(shaderProgram, "projection");
     const GLint normalMatrixLocation = glGetUniformLocation(shaderProgram, "normalMatrix");
     const GLint lightDirectionLocation = glGetUniformLocation(shaderProgram, "lightDirection");
-    const GLint lightColorLocation = glGetUniformLocation(shaderProgram, "lightColor");
+    const GLint lowColorLocation = glGetUniformLocation(shaderProgram, "lowColor");
+    const GLint highColorLocation = glGetUniformLocation(shaderProgram, "highColor");
     const GLint viewPositionLocation = glGetUniformLocation(shaderProgram, "viewPosition");
-    const GLint baseColorLocation = glGetUniformLocation(shaderProgram, "baseColor");
     const GLint ambientStrengthLocation = glGetUniformLocation(shaderProgram, "ambientStrength");
     const GLint specularStrengthLocation = glGetUniformLocation(shaderProgram, "specularStrength");
     const GLint shininessLocation = glGetUniformLocation(shaderProgram, "shininess");
@@ -172,8 +172,8 @@ int main()
 
     const glm::vec3 lightDirection =
         glm::normalize(glm::vec3(0.6f, 1.0f, 0.8f));
-    const glm::vec3 lightColor(1.0f, 0.96f, 0.90f);
-    const glm::vec3 baseColor(0.18f, 0.48f, 0.82f);
+    const glm::vec3 lowColor(0.30f, 0.55f, 0.20f);
+    const glm::vec3 highColor(0.55f, 0.52f, 0.48f);
     const float ambientStrength = 0.12f;
     const float specularStrength = 0.28f;
     const float shininess = 32.0f;
@@ -214,9 +214,9 @@ int main()
         glUniformMatrix3fv(
             normalMatrixLocation, 1, GL_FALSE, glm::value_ptr(normalMatrix));
         glUniform3fv(lightDirectionLocation, 1, glm::value_ptr(lightDirection));
-        glUniform3fv(lightColorLocation, 1, glm::value_ptr(lightColor));
+        glUniform3fv(lowColorLocation, 1, glm::value_ptr(lowColor));
+        glUniform3fv(highColorLocation, 1, glm::value_ptr(highColor));
         glUniform3fv(viewPositionLocation, 1, glm::value_ptr(viewPosition));
-        glUniform3fv(baseColorLocation, 1, glm::value_ptr(baseColor));
         glUniform1f(ambientStrengthLocation, ambientStrength);
         glUniform1f(specularStrengthLocation, specularStrength);
         glUniform1f(shininessLocation, shininess);

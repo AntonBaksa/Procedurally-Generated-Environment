@@ -8,12 +8,16 @@ in vec3 worldNormal;
 
 // lightDirection points from the surface toward the directional light.
 uniform vec3 lightDirection;
-uniform vec3 lightColor;
 uniform vec3 viewPosition;
-uniform vec3 baseColor;
 uniform float ambientStrength;
 uniform float specularStrength;
 uniform float shininess;
+
+float maxHeight = 1.0f;
+
+uniform vec3 lowColor;
+uniform vec3 middleColor;
+uniform vec3 highColor;
 
 out vec4 FragColor; // The colour produced for this fragment.
 
@@ -35,9 +39,12 @@ void main()
         specular = pow(max(dot(N, H), 0.0), shininess);
     }
 
-    vec3 ambientColor = ambientStrength * baseColor * lightColor;
-    vec3 diffuseColor = diffuse * baseColor * lightColor;
-    vec3 specularColor = specularStrength * specular * lightColor;
+    float heightT = clamp(worldPosition.y / maxHeight, 0.0, 1.0);
+    vec3 terrainColor = mix(lowColor, highColor, heightT);
+
+    vec3 ambientColor = ambientStrength * terrainColor;
+    vec3 diffuseColor = diffuse * terrainColor;
+    vec3 specularColor = specularStrength * specular * lowColor;
 
     vec3 color = ambientColor + diffuseColor + specularColor;
     FragColor = vec4(color, 1.0);

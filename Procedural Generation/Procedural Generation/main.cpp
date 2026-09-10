@@ -180,7 +180,7 @@ int main()
 
     const float fieldOfView = glm::radians(45.0f);
     const float nearPlane = 0.1f;
-    const float farPlane = 100.0f;
+    const float farPlane = 2000.0f;
 
     while (glfwWindowShouldClose(window) == GLFW_FALSE)
     {

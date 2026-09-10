@@ -16,9 +16,9 @@ struct Vertex
 class Terrain
 {
 public:
-	int size = 32;
-	float maxHeight = 1.0f;
-	float noiseFrequency = 0.6f;
+	int size = 128;
+	float maxHeight = 6.0f;
+	float noiseFrequency = 0.15f;
 
 	std::vector<float> heightmap;
 	std::vector<Vertex> vertices;

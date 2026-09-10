@@ -1,25 +1,20 @@
 #version 330 core
 
-// Rasterization generates fragments for the covered samples of the cube.
-// This shader uses interpolated surface data to produce a colour for each fragment.
-
 in vec3 worldPosition;
 in vec3 worldNormal;
 
-// lightDirection points from the surface toward the directional light.
 uniform vec3 lightDirection;
 uniform vec3 viewPosition;
 uniform float ambientStrength;
 uniform float specularStrength;
 uniform float shininess;
 
-float maxHeight = 1.0f;
+float maxHeight = 4.0f;
 
 uniform vec3 lowColor;
-uniform vec3 middleColor;
 uniform vec3 highColor;
 
-out vec4 FragColor; // The colour produced for this fragment.
+out vec4 FragColor; // The color produced for this fragment.
 
 void main()
 {

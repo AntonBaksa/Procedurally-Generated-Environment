@@ -12,8 +12,8 @@
 
 namespace
 {
-    constexpr int WindowWidth = 900;
-    constexpr int WindowHeight = 600;
+    constexpr int WindowWidth = 1600;
+    constexpr int WindowHeight = 1000;
 
     void glfwErrorCallback(int error, const char* description)
     {
@@ -63,7 +63,7 @@ int main()
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
 
     const int loadedVersion = gladLoadGL(glfwGetProcAddress);
     if (loadedVersion == 0)
@@ -182,6 +182,9 @@ int main()
     const float nearPlane = 0.1f;
     const float farPlane = 2000.0f;
 
+    double lastReportTime = glfwGetTime();
+    int frameCount = 0;
+
     while (glfwWindowShouldClose(window) == GLFW_FALSE)
     {
         processInput(window);
@@ -226,6 +229,20 @@ int main()
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        frameCount++;
+        const double now = glfwGetTime();
+        if (now - lastReportTime >= 1.0)
+        {
+            const double avgFrameTimeMs =
+                1000.0 * (now - lastReportTime) / frameCount;
+            std::cout
+                << "size=" << terrain.size
+                << "  FPS=" << frameCount
+                << "  avg frame time=" << avgFrameTimeMs << " ms\n";
+            frameCount = 0;
+            lastReportTime = now;
+        }
     }
 
     glDeleteProgram(shaderProgram);
